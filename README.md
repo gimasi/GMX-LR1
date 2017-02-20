@@ -8,4 +8,4 @@ We are publishing the stack as an [Atollic Studio](https://atollic.com/) project
 The GMX-LR1 is the node we are using in Gimasi for all our LoRa IoT applications, its one of the possible RF-addons for out multiprotocol TUINO maker's IoT platform.<br>
 
 Here is a picture of the node (beta version), in this picture there is also it's companion board that make it's very easy to fast prototype your sensor.
-![GMX-LR1](/doc/gmx-lr1-small.jpg?raw=true)
+![GMX-LR1](/docs/gmx-lr1-small.jpg?raw=true)
