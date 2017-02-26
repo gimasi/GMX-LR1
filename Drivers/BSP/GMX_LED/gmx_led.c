@@ -42,7 +42,7 @@ static uint8_t led_flash_counts[NUM_LEDS];
 static uint16_t led_pins[NUM_LEDS];
 static GPIO_TypeDef *led_ports[NUM_LEDS];
 static TimerEvent_t led_timers[NUM_LEDS];
-
+static uint32_t led_flash_speed[NUM_LEDS];
 
 static void OnLed1TimerEvent( void );
 static void OnLed2TimerEvent( void );
@@ -89,12 +89,17 @@ void GMX_LedInit() {
 	}
 
 	TimerInit( &led_timers[0], OnLed1TimerEvent );
-	TimerSetValue( &led_timers[0], FLASH_SLOW_MS );
+	led_flash_speed[0] = FLASH_SLOW_MS;
+
 
 	TimerInit( &led_timers[1], OnLed2TimerEvent );
+	led_flash_speed[1] = FLASH_SLOW_MS;
+
 	TimerSetValue( &led_timers[1], FLASH_SLOW_MS );
 
 	TimerInit( &led_timers[2], OnLed3TimerEvent );
+	led_flash_speed[2] = FLASH_SLOW_MS;
+
 	TimerSetValue( &led_timers[2], FLASH_SLOW_MS );
 
 }
@@ -183,10 +188,15 @@ static void OnLed1TimerEvent( void ){
 	if ( led_flash_counts[LED_1] != FLASH_COUNT_INFINITE )
 		led_flash_counts[LED_1]--;
 
-	if ( led_flash_counts[LED_1] > 0 )
+	if ( led_flash_counts[LED_1] > 0 ) {
+
+		TimerSetValue( &led_timers[LED_1], led_flash_speed[LED_1] );
 		TimerStart(&led_timers[LED_1]);
-	else
+	}
+	else {
 		led_status[LED_1] = LED_OFF;
+		TimerStop(&led_timers[LED_1]);
+	}
 
 }
 
@@ -204,10 +214,15 @@ static void OnLed2TimerEvent( void ){
 		if ( led_flash_counts[LED_2] != FLASH_COUNT_INFINITE )
 			led_flash_counts[LED_2]--;
 
-		if ( led_flash_counts[LED_2] > 0 )
+		if ( led_flash_counts[LED_2] > 0 ) {
+			TimerSetValue( &led_timers[LED_2], led_flash_speed[LED_2] );
 			TimerStart(&led_timers[LED_2]);
-		else
+		}
+		else {
 			led_status[LED_2] = LED_OFF;
+			TimerStop(&led_timers[LED_2]);
+		}
+
 }
 
 static void  OnLed3TimerEvent(void) {
@@ -224,10 +239,14 @@ static void  OnLed3TimerEvent(void) {
 		if ( led_flash_counts[LED_3] != FLASH_COUNT_INFINITE )
 			led_flash_counts[LED_3]--;
 
-		if ( led_flash_counts[LED_3] > 0 )
+		if ( led_flash_counts[LED_3] > 0 ) {
+			TimerSetValue( &led_timers[LED_3], led_flash_speed[LED_3] );
 			TimerStart(&led_timers[LED_3]);
-		else
+		}
+		else {
 			led_status[LED_3] = LED_OFF;
+			TimerStop(&led_timers[LED_3]);
+		}
 }
 
 static void __GMX_updateHW(uint8_t i) {
@@ -254,6 +273,7 @@ static void __GMX_updateHW(uint8_t i) {
 					case LED_FLASH_1:
 						HW_GPIO_Write( led_ports[i], led_pins[i], __LED_ON);
 						led_hw_status[i] = LED_ON;
+						led_flash_speed[i]=FLASH_SLOW_MS;
 						TimerSetValue(&led_timers[i],FLASH_SLOW_MS);
 						TimerStart(&led_timers[i]);
 						break;
@@ -261,6 +281,7 @@ static void __GMX_updateHW(uint8_t i) {
 					case LED_FLASH_2:
 						HW_GPIO_Write( led_ports[i], led_pins[i], __LED_ON);
 						led_hw_status[i] = LED_ON;
+						led_flash_speed[i]=FLASH_SLOW_MS;
 						TimerSetValue(&led_timers[i],FLASH_SLOW_MS);
 						TimerStart(&led_timers[i]);
 						break;
@@ -268,6 +289,7 @@ static void __GMX_updateHW(uint8_t i) {
 					case LED_FLASH_3:
 						HW_GPIO_Write( led_ports[i], led_pins[i], __LED_ON);
 						led_hw_status[i] = LED_ON;
+						led_flash_speed[i]=FLASH_SLOW_MS;
 						TimerSetValue(&led_timers[i],FLASH_SLOW_MS);
 						TimerStart(&led_timers[i]);
 						break;
@@ -275,6 +297,7 @@ static void __GMX_updateHW(uint8_t i) {
 					case LED_FLASH_SLOW:
 						HW_GPIO_Write( led_ports[i], led_pins[i], __LED_ON);
 						led_hw_status[i] = LED_ON;
+						led_flash_speed[i]=FLASH_SLOW_MS;
 						TimerSetValue(&led_timers[i],FLASH_SLOW_MS);
 						TimerStart(&led_timers[i]);
 						break;
@@ -282,6 +305,7 @@ static void __GMX_updateHW(uint8_t i) {
 					case LED_FLASH_MEDIUM:
 						HW_GPIO_Write( led_ports[i], led_pins[i], __LED_ON);
 						led_hw_status[i] = LED_ON;
+						led_flash_speed[i]=FLASH_MEDIUM_MS;
 						TimerSetValue(&led_timers[i],FLASH_MEDIUM_MS);
 						TimerStart(&led_timers[i]);
 						break;
@@ -289,6 +313,7 @@ static void __GMX_updateHW(uint8_t i) {
 					case LED_FLASH_FAST:
 						HW_GPIO_Write( led_ports[i], led_pins[i], __LED_ON);
 						led_hw_status[i] = LED_ON;
+						led_flash_speed[i]=FLASH_FAST_MS;
 						TimerSetValue(&led_timers[i],FLASH_FAST_MS);
 						TimerStart(&led_timers[i]);
 						break;

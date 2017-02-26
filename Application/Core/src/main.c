@@ -97,14 +97,15 @@ Maintainer: Miguel Luis, Gregory Cristian and Wael Guibene
 /* Private function prototypes -----------------------------------------------*/
 
 /* call back when LoRa will transmit a frame*/
-static void LoraTxData( lora_AppData_t *AppData, FunctionalState* IsTxConfirmed);
+//static void LoraTxData( lora_AppData_t *AppData, FunctionalState* IsTxConfirmed);
 
 /* call back when LoRa has received a frame*/
-static void LoraRxData( lora_AppData_t *AppData);
+//static void LoraRxData( lora_AppData_t *AppData);
 
 
 /* Private variables ---------------------------------------------------------*/
 /* load call backs*/
+/*
 static LoRaMainCallback_t LoRaMainCallbacks ={ HW_GetBatteryLevel,
                                                HW_GetUniqueId,
                                                HW_GetRandomSeed,
@@ -113,11 +114,12 @@ static LoRaMainCallback_t LoRaMainCallbacks ={ HW_GetBatteryLevel,
 											   Application_LoraJoinedNetwork,
 											   Application_LoraJoinRequest,
 											   Application_LoraMacSendOnChannel};
-
+*/
 
 /* !
  *Initialises the Lora Parameters
  */
+/*
 static LoRaParam_t LoRaParamInit = {TX_ON_EVENT,
                                     0,
                                     CLASS_C,
@@ -125,7 +127,7 @@ static LoRaParam_t LoRaParamInit = {TX_ON_EVENT,
                                     DR_0,
                                     LORAWAN_PUBLIC_NETWORK,
 									DR_0 };   // Initial OTA Join DataRate
-
+*/
 /* Private functions ---------------------------------------------------------*/
 
 /**
@@ -148,20 +150,15 @@ int main( void )
   DBG_Init( );
   
   /* USER CODE BEGIN 1 */
+  Application_Init();
 
   /* USER CODE END 1 */
-  
-  /* Configure the Lora Stack*/
-  lora_Init( &LoRaMainCallbacks, &LoRaParamInit);
 
-  /* start FSM - runs DEVICE_STATE_INIT */
-  lora_fsm( );
 
   PRINTF("%s\n\r", APPLICATION_NAME);
   PRINTF("VERSION %X\n\r", APPLICATION_VERSION);
   PRINTF("LORAWAN VERSION: %X\n\r", VERSION);
 
-  Application_Init();
   
   /* main loop*/
   while( 1 )
@@ -192,19 +189,21 @@ int main( void )
 }
 
 
-static void LoraTxData( lora_AppData_t *AppData, FunctionalState* IsTxConfirmed)
-{
-  /* USER CODE BEGIN 3 */
-  AppData->Port = lora_config_application_port_get();
-  *IsTxConfirmed =  lora_config_reqack_get();
-  /* USER CODE END 3 */
-}
-    
+
+//static void LoraTxData( lora_AppData_t *AppData, FunctionalState* IsTxConfirmed)
+//{
+//  /* USER CODE BEGIN 3 */
+//  AppData->Port = lora_config_application_port_get();
+//  *IsTxConfirmed =  lora_config_reqack_get();
+//  /* USER CODE END 3 */
+//}
+
+/*
 static void LoraRxData( lora_AppData_t *AppData )
 {
- // set_at_receive(AppData->Port, AppData->Buff, AppData->BuffSize);
+  set_at_receive(AppData->Port, AppData->Buff, AppData->BuffSize);
 }
-
+*/
 
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

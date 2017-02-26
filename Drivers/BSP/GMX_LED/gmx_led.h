@@ -32,6 +32,8 @@
 #define FLASH_MEDIUM_MS		 500
 #define FLASH_FAST_MS		 250
 
+#define FLASH_WARP_MS		 100
+
 
 // HW SPECIFIC DEFINES
 

@@ -4092,7 +4092,7 @@ void LoRaMacTestSetDutyCycleOn( bool enable )
 }
 
 void LoRaMacReset() {
-	ResetMacParameters();
+	//ResetMacParameters();
 	// To reset duty cycle
 	TxTimeOnAir = 0;
 }
