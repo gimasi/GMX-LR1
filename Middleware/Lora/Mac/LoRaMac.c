@@ -1445,6 +1445,21 @@ static void OnMacStateCheckTimerEvent( void )
                         ChannelsNbRepCounter = LoRaMacParams.ChannelsNbRep;
                         UpLinkCounter = 0;
                     }
+                    else
+                    {
+                    	// GIMASI - Resync Nonce
+                    	LoRaMacHeader_t macHdr;
+                    	LoRaMacFrameCtrl_t fCtrl;
+
+                    	macHdr.Value = 0;
+                    	macHdr.Bits.MType = FRAME_TYPE_JOIN_REQ;
+
+                    	fCtrl.Value = 0;
+                    	fCtrl.Bits.Adr = AdrCtrlOn;
+
+                    	PrepareFrame( &macHdr, &fCtrl, 0, NULL, 0 );
+                    	// END GIMASI
+                    }
                 }
             }
             if( ( LoRaMacFlags.Bits.MlmeReq == 1 ) || ( ( LoRaMacFlags.Bits.McpsReq == 1 ) ) )
