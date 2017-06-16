@@ -1477,11 +1477,8 @@ typedef struct sLoRaMacCallback
      *          to measure the battery level]
      */
     uint8_t ( *GetBatteryLevel )( void );
-
     void ( *JoinRequestCB )( uint32_t join_requets_num );
-
     void (*SendOnChannelCB) (uint32_t tx_delay);
-
 }LoRaMacCallback_t;
 
 /*!

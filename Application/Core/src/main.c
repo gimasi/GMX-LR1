@@ -138,7 +138,7 @@ static LoRaParam_t LoRaParamInit = {TX_ON_EVENT,
 int main( void )
 {
   /* STM32 HAL library initialization*/
-  HAL_Init( );
+    HAL_Init( );
   
   /* Configure the system clock*/
   SystemClock_Config( );

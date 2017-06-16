@@ -108,7 +108,7 @@ void vcom_IoDeInit(void);
 void vcom_Send( char *format, ... );
 
 /* Exported macros -----------------------------------------------------------*/
-#if 1
+#if 0
 #define PRINTF(...)     vcom_Send(__VA_ARGS__)
 #else
 #define PRINTF(...)

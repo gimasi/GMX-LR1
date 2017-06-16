@@ -566,6 +566,7 @@ LoRaMacFlags_t LoRaMacFlags;
  */
 
 static uint8_t InitialJoinDatarate = DR_0;
+static TimerTime_t lastTx_dutyCycleTimeOff = 0;
 
 /*!
  * \brief Function to be executed on Radio Tx Done event
@@ -1392,7 +1393,7 @@ static void OnRadioRxTimeout( void )
         OnRxWindow2TimerEvent( );
     }
 
-    if( RxSlot == 1 )
+    if(( RxSlot == 1 ) && ( LoRaMacDeviceClass != CLASS_C ))
     {
         if( NodeAckRequested == true )
         {
@@ -2724,11 +2725,14 @@ static LoRaMacStatus_t ScheduleTx( )
     // Schedule transmission of frame
     if( dutyCycleTimeOff == 0 )
     {
+    	lastTx_dutyCycleTimeOff = 0;
     	// Try to send now
     	return SendFrameOnChannel( Channels[Channel] );
     }
     else
     {
+       	lastTx_dutyCycleTimeOff = dutyCycleTimeOff;
+
         // Send later - prepare timer
         LoRaMacState |= MAC_TX_DELAYED;
         TimerSetValue( &TxDelayedTimer, dutyCycleTimeOff );

@@ -90,7 +90,7 @@ Maintainer: Miguel Luis, Gregory Cristian and Wael Guibene
    uint8_t NwkSKey[16];         /*< Network Session Key */
    uint8_t AppSKey[16];         /*< Application Session Key */
    int16_t Rssi;                /*< Rssi of the received packet */
-   uint8_t Snr;                 /*< Snr of the received packet */
+   int8_t Snr;                  /*< Snr of the received packet */
    uint8_t application_port;    /*< Application port we will receive to */
    FunctionalState ReqAck;      /*< ENABLE if acknowledge is requested */
    McpsConfirm_t *McpsConfirm;  /*< pointer to the confirm structure */

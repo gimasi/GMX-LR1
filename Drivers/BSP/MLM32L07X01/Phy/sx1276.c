@@ -49,16 +49,13 @@ Maintainer: Miguel Luis, Gregory Cristian and Wael Guibene
   */
   
 /* Includes ------------------------------------------------------------------*/
-#include <stdbool.h>
-#include <stdint.h>
-
+#include "hw.h"
 #include "delay.h"
 #include "timeServer.h"
 #include "radio.h"
 #include "sx1276.h"
 #include "mlm32l07x01.h"
 #include <string.h>
-#include "hw.h"
 
 
 /*
@@ -268,8 +265,9 @@ uint32_t SX1276Init( RadioEvents_t *events )
     TimerInit( &RxTimeoutTimer, SX1276OnTimeoutIrq );
     TimerInit( &RxTimeoutSyncWord, SX1276OnTimeoutIrq );
   
+#ifdef TCXO_PRESENT
     MLM_TCXO_ON(); //TCXO ON
-  
+#endif
     SX1276Reset( );
 
     RxChainCalibration( );
@@ -288,7 +286,11 @@ uint32_t SX1276Init( RadioEvents_t *events )
 
     SX1276.Settings.State = RF_IDLE;
     
+#ifdef TXCO_PRESENT
     return RADIO_WAKEUP_TIME + BOARD_WAKEUP_TIME;
+#else
+    return RADIO_WAKEUP_TIME;
+#endif
 }
 
 RadioState_t SX1276GetStatus( void )

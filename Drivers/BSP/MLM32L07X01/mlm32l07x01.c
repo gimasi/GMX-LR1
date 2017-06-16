@@ -61,6 +61,7 @@ Maintainer: Miguel Luis and Gregory Cristian
 
 #define IRQ_HIGH_PRIORITY  0
 
+#ifdef TCXO_PRESENT
 /* Delay in ms between radio set in sleep mode and TCXO off*/
 #define TCXO_OFF_DELAY 2 
 /*!
@@ -69,6 +70,7 @@ Maintainer: Miguel Luis and Gregory Cristian
 static TimerEvent_t TcxoStopTimer;
 
 static void OnTcxoStopTimerEvent( void ); 
+#endif
 
 /*!
  * Flag used to set the RF switch control pins in low power mode when the radio is not active.
@@ -119,10 +121,12 @@ void SX1276IoInit( void )
   HW_GPIO_Init( RADIO_DIO_1_PORT, RADIO_DIO_1_PIN, &initStruct );
   HW_GPIO_Init( RADIO_DIO_2_PORT, RADIO_DIO_2_PIN, &initStruct );
   HW_GPIO_Init( RADIO_DIO_3_PORT, RADIO_DIO_3_PIN, &initStruct );
-  
+
+#ifdef TCXO_PRESENT
   initStruct.Mode =GPIO_MODE_OUTPUT_PP;
   initStruct.Pull = GPIO_NOPULL;  
   HW_GPIO_Init( RADIO_TCXO_VCC_PORT, RADIO_TCXO_VCC_PIN, &initStruct );
+#endif
 }
 
 void SX1276IoIrqInit( DioIrqHandler **irqHandlers )
@@ -199,33 +203,37 @@ void SX1276SetAntSwLowPower( bool status )
     
     if( status == false )
     {
+	 #ifdef TCXO_PRESENT
       TimerStop( &TcxoStopTimer );
       
       MLM_TCXO_ON();  //TCXO ON
       
       DelayMs( BOARD_WAKEUP_TIME ); //start up time of TCXO
-      
+	#endif
       SX1276AntSwInit( );
     }
     else 
     {
       SX1276AntSwDeInit( );
-      
+	#ifdef TCXO_PRESENT
       TimerInit( &TcxoStopTimer, OnTcxoStopTimerEvent );
       
       TimerSetValue( &TcxoStopTimer, TCXO_OFF_DELAY);
       
       TimerStart( &TcxoStopTimer );
+	#endif
     }
   }
 }
 
+#ifdef TCXO_PRESENT
 static void OnTcxoStopTimerEvent( void )
 {
   TimerStop( &TcxoStopTimer );
 
   MLM_TCXO_OFF();  //TCXO OFF
 }
+#endif
 
 void SX1276SetAntSw( uint8_t rxTx )
 {

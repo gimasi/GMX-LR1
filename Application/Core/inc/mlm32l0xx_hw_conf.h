@@ -105,8 +105,10 @@ Maintainer: Miguel Luis and Gregory Cristian
 #define RADIO_DIO_5_PORT                          GPIOA
 #define RADIO_DIO_5_PIN                           GPIO_PIN_4
 
+#ifdef TCXO_PRESENT
 #define RADIO_TCXO_VCC_PORT                       GPIOA
 #define RADIO_TCXO_VCC_PIN                        GPIO_PIN_12
+#endif
 
 #define RADIO_ANT_SWITCH_PORT_RX                  GPIOA //CRF1
 #define RADIO_ANT_SWITCH_PIN_RX                   GPIO_PIN_1
